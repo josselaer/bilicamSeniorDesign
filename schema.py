@@ -25,10 +25,20 @@ db.user.insert(
     }
 )
 
+# Field "Picture" just holds the location of the picture in the server, content is random
+# Can be taken out
+
 db.pictures.insert(
     {
     "_id":"asa9s048a9s40a890",
-    "date":datetime.datetime.utcnow(),
+    "TimeStamp" : "10\/21\/2016 14:26:29:68",
+    "Other" : "False",
+    "Obstruction" : "False",
+    "PoorLighting" : "False",
+    "BlurryGrainy" : "False",
+    "Flash" : "False",
+    "Glare" : "False",
+    "Shadow" : "False",
     "picture":"Baby.jpeg",
     "user_id":0123456789
     }
@@ -36,8 +46,15 @@ db.pictures.insert(
 
 db.pictures.insert(
     {
-    "_id":"s6a4s8da4d89sada4d98dsa",
-    "date":datetime.datetime.utcnow(),
+    "_id":"6as46as4a68s4",
+    "TimeStamp" : "10\/21\/2016 14:26:34:36",
+    "Other" : "False",
+    "Obstruction" : "False",
+    "PoorLighting" : "False",
+    "BlurryGrainy" : "False",
+    "Flash" : "False",
+    "Glare" : "False",
+    "Shadow" : "False",
     "picture":"Baby2.jpeg",
     "user_id":0123456789
     }
