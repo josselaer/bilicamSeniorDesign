@@ -2,10 +2,7 @@
 
 
 function search_patient() {
-    console.log("searching");
     var formData = $("#search_form").serializeArray();
-    //alert("NOOOO");
-    console.log(formData);
     /* 6
     [{name: "Search By", value: "ethnicity"}, 
     {name: "ID", value: ""}, 
@@ -47,7 +44,7 @@ function search_patient() {
       alert("Must enter a number value");
     }
     else {
-      console.log("correct");
+
     }
 
   }
@@ -61,6 +58,18 @@ function search_patient() {
   }
 
   function search_by_ethnicity(formData) {
+    var form_size = formData.length;
+
+    if(form_size <= 6) {
+      alert("Pick at least one ethnicity");
+    }
+    else {
+      var ethnicities = [];
+      for(i = 6; i < form_size; i++) {
+        ethnicities.push(formData[i].name);
+      }
+      console.log(ethnicities);
+    }
 
   }
 
