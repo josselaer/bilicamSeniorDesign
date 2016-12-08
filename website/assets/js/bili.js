@@ -1,5 +1,29 @@
 
+//http://private-ca334-bilicam.apiary-mock.com
 
+function make_csv(data) {
+
+}
+
+function fill_table(data) {
+
+  console.log("here");
+
+  var id_val = data["ID"];
+  var firstName = data["FirstName"];
+  var lastName = data["LastName"];
+  var bili1 = data["BilirubinValue1"];
+  var bili2 = data["BilirubinValue2"];
+
+  $("#table_id_number").html(id_val);
+  $("#table_first_name").html(firstName);
+  $("#table_last_name").html(lastName);
+  $("#table_bili_range").html(bili1 + " - " + bili2);
+
+  $("#results_table").css("display", "block");
+  //$("table_ethnicity").val(id_val);
+
+}
 
 function search_patient() {
     var formData = $("#search_form").serializeArray();
@@ -37,23 +61,63 @@ function search_patient() {
 }
 
   function search_by_bili(formData) {
+    var theUrl="http://private-ca334-bilicam.apiary-mock.com/patient/bili/";
     var num1 = parseFloat(formData[4].value);
     var num2 = parseFloat(formData[5].value);
+    theUrl += num1 + "/" + num2;
 
     if(isNaN(num1) || isNaN(num2)) {
       alert("Must enter a number value");
     }
     else {
+      $.ajax({
+        url: theUrl,
+        type: "get",
+        async: false,
+        success: function(data) {
+
+          console.log(data[0]);
+        },
+        error: function() {
+          console.log(theUrl);
+        }
+      });
 
     }
 
   }
 
   function search_by_name(formData) {
+    var theUrl = "http://private-ca334-bilicam.apiary-mock.com/patient/name/";
+    var firstName = formData[2].value;
+    var lastName = formData[3].value;
+    theUrl += firstName + "/" + lastName;
 
+    $.ajax({
+      url: theUrl,
+      type: "get",
+      async: false,
+      success: function(data) {
+        fill_table(data);
+        //console.log(data);
+      }
+    });
   }
 
   function search_by_id(formData) {
+  var theUrl = "https://private-ca334-bilicam.apiary-mock.com/patient/id/";
+    var idNum = formData[1].value;
+    theUrl += idNum;
+
+    $.ajax({
+      url: theUrl,
+      type: "get",
+      async: false,
+      success: function(data) {
+        fill_table(data);
+        //console.log(data);
+      }
+    });
 
   }
 
@@ -64,16 +128,37 @@ function search_patient() {
       alert("Pick at least one ethnicity");
     }
     else {
+      var theUrl = "http://private-ca334-bilicam.apiary-mock.com/patient/ethnicity/";
+
       var ethnicities = [];
+      var ethnicity = "";
       for(i = 6; i < form_size; i++) {
-        ethnicities.push(formData[i].name);
+        ethnicity = formData[i].name;
+        ethnicities.push(ethnicity);
+        theUrl += ethnicity + "/";
       }
-      console.log(ethnicities);
+
+      $.ajax({
+        url: theUrl,
+        type: "get",
+        async: false,
+        success: function(data) {
+
+          console.log(data);
+        }
+      });
+
+
     }
 
   }
 
+  function login() {
+    window.location.href = "index.html";
+  }
+
 	$('#search_by').on('change', function() {
+    $("#results_table").css("display", "none");
   		curr_value = this.value;
   		//bilirubin, ethnicity, by_id, by_name
   		//bili_search, ethnicity_search, id_search, name_search
