@@ -1,4 +1,3 @@
-
 //http://private-ca334-bilicam.apiary-mock.com
 
 function make_csv(data) {
@@ -75,8 +74,8 @@ function search_patient() {
         type: "get",
         async: false,
         success: function(data) {
-
-          console.log(data[0]);
+          alert("There are " + data.length + " results. Click download to download .csv file");
+          console.log(data);
         },
         error: function() {
           console.log(theUrl);
@@ -135,7 +134,7 @@ function search_patient() {
       for(i = 6; i < form_size; i++) {
         ethnicity = formData[i].name;
         ethnicities.push(ethnicity);
-        theUrl += ethnicity + "/";
+        theUrl += ethnicity + "_";
       }
 
       $.ajax({
@@ -143,7 +142,7 @@ function search_patient() {
         type: "get",
         async: false,
         success: function(data) {
-
+          alert("There are " + data.length + " results. Click download to download .csv file");
           console.log(data);
         }
       });
@@ -154,7 +153,17 @@ function search_patient() {
   }
 
   function login() {
-    window.location.href = "index.html";
+    var theUrl = "http://private-ca334-bilicam.apiary-mock.com/login";
+    $.ajax({
+        url: theUrl,
+        type: "post",
+        async: false,
+        success: function(data) {
+          alert("You are now login");
+          window.location.href = "index.html";
+
+        }
+      });
   }
 
 	$('#search_by').on('change', function() {
