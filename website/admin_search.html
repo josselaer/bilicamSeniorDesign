@@ -54,22 +54,22 @@
 					<div id="main">
 						<div class="inner">
 							<section>
-								<form action="javascript:search_patient()" id="search_form">
+								<form action="javascript:search_doctor()" id="search_form">
 									<div class="oneQuarter first field">
-										<select id="search_by" name="Search By">
+										<select id="admin_search_by" name="Search By">
 											<option value="" disabled selected>Search By</option>
-											<option value="by_id">Username</option>
+											<option value="by_user">Username</option>
 											<option value="by_name">Last Name</option>
 										</select>
 									</div>
 
 
-									<div class="field half" id="id_search">
-										<input type="text" name="ID" id="ID" placeholder="Username" />
+									<div class="field half" id="user_search">
+										<input type="text" name="username" id="username" placeholder="Username" />
 									</div>
 
 									<div class="field half" id="name_search">
-										<input type="text" name="ID" id="ID" placeholder="Last Name" />
+										<input type="text" name="name" id="name" placeholder="Last Name" />
 									</div>
 
 									<div class="field oneQuarter" id="Submit">
@@ -85,29 +85,16 @@
 
 								<!--<div>There are 5 results</div><br>-->
 
-								<div class="table-wrapper threeQuarter first" id="results_table">
+								<div class="table-wrapper threeQuarter first" id="dr_results_table">
 										<table class="alt">
+											<thead>
+												<tr>
+													<th>Username</th>
+													<th>Name</th>
+													<th></th>
+												</tr>
+											</thead>
 											<tbody>
-												<tr>
-													<td>ID number</td>
-													<td id="table_id_number"></td>
-												</tr>
-												<tr>
-													<td>First Name</td>
-													<td id="table_first_name"></td>
-												</tr>
-												<tr>
-													<td>Last Name</td>
-													<td id="table_last_name"></td>
-												</tr>
-												<tr>
-													<td>Bilirubin range</td>
-													<td id="table_bili_range"></td>
-												</tr>
-												<tr>
-													<td>Ethnicity</td>
-													<td id="table_ethnicity"></td>
-												</tr>
 											</tbody>
 										</table>
 									</div>

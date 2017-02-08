@@ -6,8 +6,6 @@ function make_csv(data) {
 
 function fill_table(data) {
 
-  console.log("here");
-
   var id_val = data["ID"];
   var firstName = data["FirstName"];
   var lastName = data["LastName"];
@@ -198,8 +196,78 @@ function search_patient() {
   		else {
   			$("#name_search").css("display", "none");
   		}
-
-
 	})
 
+
+//admin funcitons
+
+  $('#admin_search_by').on('change', function() {
+    $("#dr_results_table").css("display", "none");
+      curr_value = this.value;
+
+      if(curr_value == "by_user") {
+        $("#user_search").css("display", "block");
+      }
+      else {
+        $("#user_search").css("display", "none");
+      }
+
+      if(curr_value == "by_name") {
+        $("#name_search").css("display", "block");
+      }
+      else {
+        $("#name_search").css("display", "none");
+      }
+  })
+
+  function search_doctor() {
+    var formData = $("#search_form").serializeArray();
+    var search_type = formData[0].value;
+    if(search_type == "by_user") {
+      admin_search_by_user(formData);
+    }
+    else if(search_type == "by_name") {
+      admin_search_by_name(formData);
+    }
+  }
+
+  function admin_search_by_user(formData) {
+    //acount/{username}
+    var theUrl = "https://private-ca334-bilicam.apiary-mock.com/account/";
+    var dr_username = formData[1].value;
+    theUrl += dr_username;
+    $.ajax({
+      url: theUrl,
+      type: "get",
+      async: false,
+      success: function(data) {
+        admin_create_table(data);
+        console.log(data);
+      }
+    });
+
+  }
+
+  function admin_search_by_name(formData) {
+    //account/name/{last_name}
+    //http://private-ca334-bilicam.apiary-mock.com
+    var theUrl = "https://private-ca334-bilicam.apiary-mock.com/account/name/";
+    var dr_name = formData[1].value;
+    theUrl += dr_name;
+
+    $.ajax({
+      url: theUrl,
+      type: "get",
+      async: false,
+      success: function(data) {
+        admin_create_table(data);
+        console.log(data);
+      }
+    });
+
+  }
+
+  function admin_create_table(data) {
+
+  }
 
