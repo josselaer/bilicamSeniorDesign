@@ -1,4 +1,10 @@
 //http://private-ca334-bilicam.apiary-mock.com
+//change apiary for post and put
+//connect create_user and edit user to apiary
+//make doctor table
+//link table to account info page
+//create cookie to pass username 
+
 
 function make_csv(data) {
 
@@ -268,6 +274,11 @@ function search_patient() {
   }
 
   function admin_create_table(data) {
-
+    //use cookies to pass username when user is selected
+    /*
+      table format: username, name, select button
+      or make select button the whole table row 
+      http://stackoverflow.com/questions/17147821/how-to-make-a-whole-row-in-a-table-clickable-as-a-link
+    */
   }
 
