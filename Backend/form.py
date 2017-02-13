@@ -1,20 +1,26 @@
 import tornado.ioloop
 import tornado.web
 import motor.motor_tornado
-import asyncio
 import os
 import tornado.escape
 import json
 import urllib.parse
-import pprint
+import tornado.httpserver
+import ssl
 
 db = motor.motor_tornado.MotorClient().Bilirubin
 
-# All HTML pages need assets to fully function
-class LoginHandler(tornado.web.RequestHandler):
+class BaseHandler(tornado.web.RequestHandler):
+    def get_current_user(self):
+        return self.get_secure_cookie("User")
+
+class LoginHandler(BaseHandler):
     """Login Page"""
     def get(self):
-        self.render("login.html")
+        if not self.current_user:
+            self.render("login.html")
+        else:
+            self.redirect("/Index")
     
     # Have to use async since the database call is asynchronous.
     async def post(self):
@@ -25,14 +31,16 @@ class LoginHandler(tornado.web.RequestHandler):
 
         # Need to add cookies or another authentication method
         if document != None:
+            self.set_secure_cookie("User", username)
             response = {"LoggedIn":"True"}
             self.write(json.dumps(response))
         else:
             response = {"LoggedIn":"False"}
             self.write(json.dumps(response))
 
-class IndexHandler(tornado.web.RequestHandler):
+class IndexHandler(BaseHandler):
     """Index Page"""
+    @tornado.web.authenticated
     def get(self):
         self.render("index.html")
 
@@ -63,11 +71,22 @@ class SearchByEthnicityHandler(tornado.web.RequestHandler):
         cursor = db.patients.find({"ethnicity":{"$in":ethnicities}})
         document = await cursor.to_list(length=100)
 
+class LogoutHandler(tornado.web.RequestHandler):
+    def get(self):
+        self.clear_cookie("User")
+        self.redirect("/")
+
 settings = {
     "template_path":os.path.dirname(os.path.realpath(__file__)) + "\\website\\",
     "static_path":os.path.dirname(os.path.realpath(__file__)) + "\\website\\assets\\",
-    "debug":True
+    "debug":True,
+    "cookie_secret":os.urandom(32),
+    "login_url":"/"
 }
+
+ssl_ctx = ssl.create_default_context(ssl.Purpose.CLIENT_AUTH)
+# .crt = Certificate and .key = private key
+ssl_ctx.load_cert_chain("server.crt", "server.key")
 
 app = tornado.web.Application([
     (r"/", LoginHandler),
@@ -76,8 +95,10 @@ app = tornado.web.Application([
     (r"/SearchByName", SearchByNameHandler),
     (r"/SearchById", SearchByIdHandler),
     (r"/SearchByEthnicity", SearchByEthnicityHandler),
+    (r"/Logout", LogoutHandler),
 ], db=db, **settings)
 
 if __name__ == "__main__":
-    app.listen(8888)
+    server = tornado.httpserver.HTTPServer(app, ssl_options=ssl_ctx)
+    server.listen(8888)
     tornado.ioloop.IOLoop.current().start()
