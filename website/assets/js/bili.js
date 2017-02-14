@@ -1,10 +1,9 @@
 //http://private-ca334-bilicam.apiary-mock.com
-//change apiary for post and put
-//connect create_user and edit user to apiary
+//connect edit user to apiary
 //make doctor table
 //link table to account info page
 //create cookie to pass username 
-
+//delete user apiary
 
 function make_csv(data) {
 
@@ -269,6 +268,37 @@ function search_patient() {
         admin_create_table(data);
         console.log(data);
       }
+    });
+
+  }
+
+  function admin_create_user() {
+    var formData = $("#create_user_form").serializeArray();
+    var username = formData[0].value;
+    var password = formData[1].value;  
+    var name = formData[2].value;  
+    var hospital = formData[3].value;  
+    var hospitalAddress = formData[4].value;  
+    var city = formData[5].value;
+    var postForm = {};
+    postForm["username"] = username;
+    postForm["password"] = password;
+    postForm["name"] = name;
+    postForm["hospital"] = hospital;
+    postForm["hospitalAddress"] = hospitalAddress;
+    postForm["city"] = city;
+    console.log(postForm);
+
+    var theUrl = "https://private-ca334-bilicam.apiary-mock.com/account";
+
+    $.ajax({
+      url : theUrl,
+      type: "POST",
+      body : formData,
+      success: function(data)
+      {
+        alert("Create user " + username);
+      },
     });
 
   }
