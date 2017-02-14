@@ -5,6 +5,7 @@
 //create cookie to pass username 
 //delete user apiary
 
+//arturo
 function make_csv(data) {
 
 }
@@ -26,6 +27,7 @@ function fill_table(data) {
   //$("table_ethnicity").val(id_val);
 
 }
+
 
 function search_patient() {
     var formData = $("#search_form").serializeArray();
@@ -201,7 +203,7 @@ function search_patient() {
   		else {
   			$("#name_search").css("display", "none");
   		}
-	})
+	});
 
 
 //admin funcitons
@@ -223,7 +225,7 @@ function search_patient() {
       else {
         $("#name_search").css("display", "none");
       }
-  })
+  });
 
   function search_doctor() {
     var formData = $("#search_form").serializeArray();
@@ -272,6 +274,7 @@ function search_patient() {
 
   }
 
+  //arturo
   function admin_create_user() {
     var formData = $("#create_user_form").serializeArray();
     var username = formData[0].value;
