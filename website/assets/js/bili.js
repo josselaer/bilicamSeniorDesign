@@ -275,10 +275,10 @@ function search_patient() {
   function admin_create_user() {
     var formData = $("#create_user_form").serializeArray();
     var username = formData[0].value;
-    var password = formData[1].value;  
-    var name = formData[2].value;  
-    var hospital = formData[3].value;  
-    var hospitalAddress = formData[4].value;  
+    var password = formData[1].value;
+    var name = formData[2].value;
+    var hospital = formData[3].value;
+    var hospitalAddress = formData[4].value;
     var city = formData[5].value;
     var postForm = {};
     postForm["username"] = username;
