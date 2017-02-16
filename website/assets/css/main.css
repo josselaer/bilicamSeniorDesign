@@ -48,7 +48,7 @@
 		-webkit-text-size-adjust: none;
 	}
 
-	#id_search, #name_search, #ethnicity_search, #bili_search, #results_table, #dr_results_table, #user_search {
+	#id_search, #date_search, #name_search, #ethnicity_search, #bili_search, #results_table, #dr_results_table, #user_search {
 		display:none;
 	}
 

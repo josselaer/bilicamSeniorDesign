@@ -61,6 +61,9 @@ function search_patient() {
     else if(search_type == "by_name") {
       search_by_name(formData);
     }
+    else if(search_type == "by_date") {
+      search_by_date(formData);
+    }
 
 }
 
@@ -157,6 +160,10 @@ function search_patient() {
 
   }
 
+  function search_by_date(formData) {
+    
+  }
+
   function login() {
     var theUrl = "http://private-ca334-bilicam.apiary-mock.com/login";
     $.ajax({
@@ -203,6 +210,13 @@ function search_patient() {
   		else {
   			$("#name_search").css("display", "none");
   		}
+
+      if(curr_value == "by_date") {
+        $("#date_search").css("display", "block");
+      }
+      else {
+        $("#date_search").css("display", "none");
+      }
 	});
 
 

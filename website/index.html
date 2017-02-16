@@ -62,6 +62,7 @@
 											<option value="ethnicity">Ethnicity</option>
 											<option value="by_id">ID</option>
 											<option value="by_name">Name</option>
+											<option value="by_date">Date</option>
 										</select>
 									</div>
 
@@ -115,6 +116,14 @@
 										</div>
 									</div>
 
+									<div id="date_search">
+										<div class="field oneQuarter">
+											<input type="text" class="datepicker" placeholder="Select Date">
+										</div>
+										<div class="field oneQuarter">
+											<input type="text" class="datepicker" placeholder="Select Date">
+										</div>
+									</div>
 
 									<div class="field oneQuarter" id="Submit">
 										<input type="submit" value="Search" class="special" />
@@ -179,6 +188,15 @@
 			<!--[if lte IE 8]><script src="assets/js/ie/respond.min.js"></script><![endif]-->
 			<script src="assets/js/main.js"></script>
 			<script src="assets/js/bili.js"></script>
+
+			<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  			<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  			
+			<script type="text/javascript">
+				$(document).ready(function() {
+    				$(".datepicker").datepicker();
+  				});
+			</script>
 
 	</body>
 </html>
