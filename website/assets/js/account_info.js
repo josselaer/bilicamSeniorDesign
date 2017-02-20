@@ -1,5 +1,5 @@
 
-//arturo
+
 $(document).ready(function() {
 	var username = "drbob1"; //need to get this using session
 

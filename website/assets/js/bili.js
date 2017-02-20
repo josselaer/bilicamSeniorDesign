@@ -5,7 +5,6 @@
 //create cookie to pass username 
 //delete user apiary
 
-//arturo
 function make_csv(data) {
 
 }
@@ -262,8 +261,8 @@ function search_patient() {
       type: "get",
       async: false,
       success: function(data) {
-        admin_create_table(data);
-        console.log(data);
+        admin_create_table(data,0);
+        //console.log(data);
       }
     });
 
@@ -273,22 +272,20 @@ function search_patient() {
     //account/name/{last_name}
     //http://private-ca334-bilicam.apiary-mock.com
     var theUrl = "https://private-ca334-bilicam.apiary-mock.com/account/name/";
-    var dr_name = formData[1].value;
-    theUrl += dr_name;
-
+    var dr_name = formData[2].value;
+    theUrl = theUrl + dr_name;
     $.ajax({
       url: theUrl,
       type: "get",
       async: false,
       success: function(data) {
-        admin_create_table(data);
-        console.log(data);
+        admin_create_table(data,1);
+        //console.log(data);
       }
     });
 
   }
 
-  //arturo
   function admin_create_user() {
     var formData = $("#create_user_form").serializeArray();
     var username = formData[0].value;
@@ -320,12 +317,79 @@ function search_patient() {
 
   }
 
-  function admin_create_table(data) {
+  function admin_create_table(data, is_array) {
     //use cookies to pass username when user is selected
     /*
       table format: username, name, select button
       or make select button the whole table row 
       http://stackoverflow.com/questions/17147821/how-to-make-a-whole-row-in-a-table-clickable-as-a-link
     */
+    //{username: "drbob01", name: "Dr. Bob Kelso", hospital: "Sacred Heart", hospitalAddress: "123 N. Hos Lane", city: "Dallas, TX"}
+    console.log(data);
+    if(is_array == 1) { //search by name
+      for(var i = 0; i < data.length; i++) {
+        add_table_row(data[i]);
+      }
+    }
+    else { //search by user
+      add_table_row(data);
+    }
+      $("#dr_results_table").css("display", "block");
+
+
+
   }
+
+  function add_table_row(data) {
+    var dr_table = document.getElementById("dr_results_body");
+
+    var tr = document.createElement('tr');
+    var td1 = document.createElement('td');
+    var td2 = document.createElement('td');
+
+
+    var dr_username = data['username'];
+    var dr_name = data['name'];
+
+    var createClickHandler = 
+            function(temp) 
+            {
+                return function() { 
+                                        console.log(temp);
+                                 };
+            };
+
+    tr.onclick = createClickHandler(dr_username);
+
+    var text1 = document.createTextNode(dr_username);
+    var text2 = document.createTextNode(dr_name);
+
+    td1.appendChild(text1);
+    td2.appendChild(text2);
+    tr.appendChild(td1);
+    tr.appendChild(td2);
+    dr_table.appendChild(tr);
+
+    /*var tr = document.createElement('tr');   
+
+    var td1 = document.createElement('td');
+    var td2 = document.createElement('td');
+
+    var text1 = document.createTextNode('Text1');
+    var text2 = document.createTextNode('Text2');
+
+    td1.appendChild(text1);
+    td2.appendChild(text2);
+    tr.appendChild(td1);
+    tr.appendChild(td2);
+
+    table.appendChild(tr);*/
+  }
+
+
+  function admin_login() {
+
+  }
+
+
 
