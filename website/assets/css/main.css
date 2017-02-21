@@ -52,6 +52,11 @@
 		display:none;
 	}
 
+	#dr_results_body tr:hover {
+		background-color: #0066ff;
+		color: #ffffff;
+	}
+
 	/*
 	#id_search {
 		display:block;

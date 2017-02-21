@@ -179,7 +179,7 @@ function search_patient() {
 
 	$('#search_by').on('change', function() {
     $("#results_table").css("display", "none");
-  		curr_value = this.value;
+  	  curr_value = this.value;
   		//bilirubin, ethnicity, by_id, by_name
   		//bili_search, ethnicity_search, id_search, name_search
   		if(curr_value == "bilirubin") {
@@ -241,6 +241,8 @@ function search_patient() {
   });
 
   function search_doctor() {
+    admin_clear_table();
+
     var formData = $("#search_form").serializeArray();
     var search_type = formData[0].value;
     if(search_type == "by_user") {
@@ -355,7 +357,9 @@ function search_patient() {
             function(temp) 
             {
                 return function() { 
-                                        console.log(temp);
+                                        var dr_username = temp; //need to use cookie here
+                                        console.log(dr_username);
+                                        window.location.href = "admin_account_info.html";
                                  };
             };
 
@@ -388,6 +392,12 @@ function search_patient() {
 
 
   function admin_login() {
+
+  }
+
+  function admin_clear_table() {
+    
+    $("#dr_results_body tr").remove();
 
   }
 
