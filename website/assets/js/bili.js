@@ -409,5 +409,41 @@ function search_patient() {
     $("#edit_user_div").css("display", "none");
   }
 
+  function admin_edit_user() {
+
+    var formData = $("#edit_user_form").serializeArray();
+    console.log(formData[0].value);
+
+    /*[{name: "username", value: "asdf"}, 
+    {name: "password", value: "fdsa"}, 
+    {name: "name", value: "jake"}, 
+    {name: "hospital_name", value: "nkfla"}, 
+    {name: "hospital_address", value: "nksfdlj"}, 
+    {name: "hospital_city", value: "kljadfsj"}] (6)*/
+
+    var request_data = {};
+    if(formData[0].value != "") {
+      request_data['username'] = formData[0].value;
+    }
+    if(formData[1].value != "") {
+      request_data['password'] = formData[1].value;
+    }
+    if(formData[2].value != "") {
+      request_data['name'] = formData[2].value;
+    }
+    if(formData[3].value != "") {
+      request_data['hospital_name'] = formData[3].value;
+    }
+    if(formData[4].value != "") {
+      request_data['hospital_address'] = formData[4].value;
+    }
+    if(formData[5].value != "") {
+      request_data['hospital_city'] = formData[5].value;
+    }
+
+    //put ajax with request_data
+
+
+  }
 
 
