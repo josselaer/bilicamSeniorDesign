@@ -401,5 +401,13 @@ function search_patient() {
 
   }
 
+  function admin_show_edit_info() {
+    $("#edit_user_div").css("display", "block");
+  }
+
+  function admin_hide_edit_info() {
+    $("#edit_user_div").css("display", "none");
+  }
+
 
 

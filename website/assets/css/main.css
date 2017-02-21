@@ -71,6 +71,18 @@
 		padding-left: 8em;
 	}
 
+	#edit_user_div {
+		display:none;
+		position: absolute;
+		z-index: 100;
+		background-color: #ffffff;
+		border-style: solid;
+		border-color: #000000;
+		border-width: 2px;
+		padding: 2em;
+		width: 66%;
+	}
+
 /* Box Model */
 
 	*, *:before, *:after {
