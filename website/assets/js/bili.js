@@ -27,6 +27,58 @@ function fill_table(data) {
 
 }
 
+function edit_user() {
+  var formData = $("#edit_user_form").serializeArray();
+
+    /*[{name: "username", value: "asdf"}, 
+    {name: "name", value: "jake"}, 
+    {name: "hospital_name", value: "nkfla"}, 
+    {name: "hospital_address", value: "nksfdlj"}, 
+    {name: "hospital_city", value: "kljadfsj"}] (6)*/
+
+    var request_data = {};
+    if(formData[0].value != "") {
+      request_data['username'] = formData[0].value;
+    }
+    if(formData[1].value != "") {
+      request_data['name'] = formData[1].value;
+    }
+    if(formData[2].value != "") {
+      request_data['hospital_name'] = formData[2].value;
+    }
+    if(formData[3].value != "") {
+      request_data['hospital_address'] = formData[3].value;
+    }
+    if(formData[4].value != "") {
+      request_data['hospital_city'] = formData[4].value;
+    }
+
+    //put ajax with request_data
+}
+
+function change_password() {
+  var formData = $("#change_password_form").serializeArray();
+  var request_data = {};
+  if(formData[0].value != formData[1].value) {
+    alert('Passwords do not match');
+  }
+  else {
+    request_data['password'] = formData[0].value;
+
+    //put ajax call with change account info
+
+  }
+
+}
+
+function show_change_password() {
+  $("#change_password_div").css("display", "block");
+}
+
+function hide_change_password() {
+  $("#change_password_div").css("display", "none");
+}
+
 
 function search_patient() {
     var formData = $("#search_form").serializeArray();
@@ -412,7 +464,6 @@ function search_patient() {
   function admin_edit_user() {
 
     var formData = $("#edit_user_form").serializeArray();
-    console.log(formData[0].value);
 
     /*[{name: "username", value: "asdf"}, 
     {name: "password", value: "fdsa"}, 

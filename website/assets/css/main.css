@@ -71,7 +71,7 @@
 		padding-left: 8em;
 	}
 
-	#edit_user_div {
+	#edit_user_div, #change_password_div {
 		display:none;
 		position: absolute;
 		z-index: 100;
