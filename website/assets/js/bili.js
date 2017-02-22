@@ -1,13 +1,39 @@
 //http://private-ca334-bilicam.apiary-mock.com
-//connect edit user to apiary
-//make doctor table
 //link table to account info page
 //create cookie to pass username 
-//delete user apiary
 
-function make_csv(data) {
+//install filesaver.js
+//npm install file-saver --save
+//bower install file-saver
+/*function make_csv(data) {
 
+  var theUrl = 'https://private-ca334-bilicam.apiary-mock.com/patient/csv/'
+
+  theUrl += data;
+
+  $.ajax({
+        url: theUrl,
+        type: "get",
+        async: false,
+        success: function(data) {
+          console.log(data);
+          var csv_info = data['csv'];
+          var filename = "patient_table.txt";
+
+          download_csv(filename, csv_info);
+
+        },
+        error: function() {
+          console.log(theUrl);
+        }
+      });
 }
+
+function download_csv(filename, text) {
+  
+  
+
+}*/
 
 function fill_table(data) {
 
