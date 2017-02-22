@@ -544,7 +544,29 @@ function search_patient() {
       },
     });
 
+  }
 
+  function admin_delete_user() { //probably needs some kind of extra authorization
+    var username = "drbob01";
+
+    var theUrl = "https://private-ca334-bilicam.apiary-mock.com/account/";
+    theUrl += username;
+
+    request_data = {};
+    request_data['username'] = "admin";
+    request_data['password'] = "password";
+
+    /*
+    $.ajax({
+      url : theUrl,
+      type: "delete",
+      request: request_data,
+      success: function(data)
+      {
+        alert("Deleted user " + username);
+        location.reload(); //send to homepage
+      },
+    });*/
   }
 
 
