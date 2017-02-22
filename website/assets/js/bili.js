@@ -29,7 +29,7 @@ function fill_table(data) {
 
 function edit_user() {
   var formData = $("#edit_user_form").serializeArray();
-
+  var username = "drbob01"; //need to use cookies to get username
     /*[{name: "username", value: "asdf"}, 
     {name: "name", value: "jake"}, 
     {name: "hospital_name", value: "nkfla"}, 
@@ -53,11 +53,24 @@ function edit_user() {
       request_data['hospital_city'] = formData[4].value;
     }
 
-    //put ajax with request_data
+    var theUrl = "https://private-ca334-bilicam.apiary-mock.com/account/";
+    theUrl += username;
+
+    $.ajax({
+      url : theUrl,
+      type: "put",
+      request : request_data,
+      success: function(data)
+      {
+        alert("Edited user " + username);
+        location.reload();
+      },
+    });
 }
 
 function change_password() {
   var formData = $("#change_password_form").serializeArray();
+  var username = "drbob01";
   var request_data = {};
   if(formData[0].value != formData[1].value) {
     alert('Passwords do not match');
@@ -65,7 +78,19 @@ function change_password() {
   else {
     request_data['password'] = formData[0].value;
 
-    //put ajax call with change account info
+    var theUrl = "https://private-ca334-bilicam.apiary-mock.com/account/";
+    theUrl += username;
+
+    $.ajax({
+      url : theUrl,
+      type: "put",
+      request : request_data,
+      success: function(data)
+      {
+        alert("Edited user " + username);
+        location.reload();
+      },
+    });
 
   }
 
@@ -483,13 +508,7 @@ function search_patient() {
   function admin_edit_user() {
 
     var formData = $("#edit_user_form").serializeArray();
-
-    /*[{name: "username", value: "asdf"}, 
-    {name: "password", value: "fdsa"}, 
-    {name: "name", value: "jake"}, 
-    {name: "hospital_name", value: "nkfla"}, 
-    {name: "hospital_address", value: "nksfdlj"}, 
-    {name: "hospital_city", value: "kljadfsj"}] (6)*/
+    var username = "drbob01"; //need to use cookies to get username
 
     var request_data = {};
     if(formData[0].value != "") {
@@ -511,7 +530,19 @@ function search_patient() {
       request_data['hospital_city'] = formData[5].value;
     }
 
-    //put ajax with request_data
+    var theUrl = "https://private-ca334-bilicam.apiary-mock.com/account/";
+    theUrl += username;
+
+    $.ajax({
+      url : theUrl,
+      type: "put",
+      request : request_data,
+      success: function(data)
+      {
+        alert("Edited user " + username);
+        location.reload();
+      },
+    });
 
 
   }
