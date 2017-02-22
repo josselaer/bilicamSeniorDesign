@@ -212,8 +212,27 @@ function search_patient() {
   }
 
   function search_by_date(formData) {
-    
+
+    var date1 = formData[formData.length-2].value;
+    var date2 = formData[formData.length-1].value;
+    date1 = date1.replace(/\//g,'-');
+    date2 = date2.replace(/\//g,'-');
+    var theUrl = 'https://private-ca334-bilicam.apiary-mock.com/patient/date/'
+
+    theUrl += date1 + "/" + date2;
+
+    $.ajax({
+        url: theUrl,
+        type: "get",
+        async: false,
+        success: function(data) {
+          alert("There are " + data.length + " results. Click download to download .csv file");
+          console.log(data);
+        }
+      });
+
   }
+  
 
   function login() {
     var theUrl = "http://private-ca334-bilicam.apiary-mock.com/login";
