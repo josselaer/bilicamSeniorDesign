@@ -213,4 +213,276 @@ function search_patient() {
 
 	})
 
+//admin funcitons
 
+  $('#admin_search_by').on('change', function() {
+    $("#dr_results_table").css("display", "none");
+      curr_value = this.value;
+
+      if(curr_value == "by_user") {
+        $("#user_search").css("display", "block");
+      }
+      else {
+        $("#user_search").css("display", "none");
+      }
+
+      if(curr_value == "by_name") {
+        $("#name_search").css("display", "block");
+      }
+      else {
+        $("#name_search").css("display", "none");
+      }
+  });
+
+  function search_doctor() {
+    admin_clear_table();
+
+    var formData = $("#search_form").serializeArray();
+    var search_type = formData[0].value;
+    if(search_type == "by_user") {
+      admin_search_by_user(formData);
+    }
+    else if(search_type == "by_name") {
+      admin_search_by_name(formData);
+    }
+  }
+
+  function admin_search_by_user(formData) {
+    //acount/{username}
+    var theUrl = "https://private-ca334-bilicam.apiary-mock.com/account/";
+    var dr_username = formData[1].value;
+    theUrl += dr_username;
+    $.ajax({
+      url: theUrl,
+      type: "get",
+      async: false,
+      success: function(data) {
+        admin_create_table(data,0);
+        //console.log(data);
+      }
+    });
+
+  }
+
+  function admin_search_by_name(formData) {
+    //account/name/{last_name}
+    //http://private-ca334-bilicam.apiary-mock.com
+    var theUrl = "https://private-ca334-bilicam.apiary-mock.com/account/name/";
+    var dr_name = formData[2].value;
+    theUrl = theUrl + dr_name;
+    $.ajax({
+      url: theUrl,
+      type: "get",
+      async: false,
+      success: function(data) {
+        admin_create_table(data,1);
+        //console.log(data);
+      }
+    });
+
+  }
+
+  function admin_create_user() {
+    var formData = $("#create_user_form").serializeArray();
+    var username = formData[0].value;
+    var password = formData[1].value;
+    var name = formData[2].value;
+    var hospital = formData[3].value;
+    var hospitalAddress = formData[4].value;
+    var city = formData[5].value;
+    var postForm = {};
+    postForm["username"] = username;
+    postForm["password"] = password;
+    postForm["name"] = name;
+    postForm["hospital"] = hospital;
+    postForm["hospitalAddress"] = hospitalAddress;
+    postForm["city"] = city;
+    console.log(postForm);
+
+    var theUrl = "https://private-ca334-bilicam.apiary-mock.com/account";
+
+    $.ajax({
+      url : theUrl,
+      type: "POST",
+      body : formData,
+      success: function(data)
+      {
+        alert("Create user " + username);
+      },
+    });
+
+  }
+
+  function admin_create_table(data, is_array) {
+    //use cookies to pass username when user is selected
+    /*
+      table format: username, name, select button
+      or make select button the whole table row
+      http://stackoverflow.com/questions/17147821/how-to-make-a-whole-row-in-a-table-clickable-as-a-link
+    */
+    //{username: "drbob01", name: "Dr. Bob Kelso", hospital: "Sacred Heart", hospitalAddress: "123 N. Hos Lane", city: "Dallas, TX"}
+    console.log(data);
+    if(is_array == 1) { //search by name
+      for(var i = 0; i < data.length; i++) {
+        add_table_row(data[i]);
+      }
+    }
+    else { //search by user
+      add_table_row(data);
+    }
+      $("#dr_results_table").css("display", "block");
+
+
+
+  }
+
+  function add_table_row(data) {
+    var dr_table = document.getElementById("dr_results_body");
+
+    var tr = document.createElement('tr');
+    var td1 = document.createElement('td');
+    var td2 = document.createElement('td');
+
+
+    var dr_username = data['username'];
+    var dr_name = data['name'];
+
+    var createClickHandler =
+            function(temp)
+            {
+                return function() {
+                                        var dr_username = temp; //need to use cookie here
+                                        console.log(dr_username);
+                                        window.location.href = "admin_account_info.html";
+                                 };
+            };
+
+    tr.onclick = createClickHandler(dr_username);
+
+    var text1 = document.createTextNode(dr_username);
+    var text2 = document.createTextNode(dr_name);
+
+    td1.appendChild(text1);
+    td2.appendChild(text2);
+    tr.appendChild(td1);
+    tr.appendChild(td2);
+    dr_table.appendChild(tr);
+
+    /*var tr = document.createElement('tr');
+
+    var td1 = document.createElement('td');
+    var td2 = document.createElement('td');
+
+    var text1 = document.createTextNode('Text1');
+    var text2 = document.createTextNode('Text2');
+
+    td1.appendChild(text1);
+    td2.appendChild(text2);
+    tr.appendChild(td1);
+    tr.appendChild(td2);
+
+    table.appendChild(tr);*/
+  }
+
+
+  function admin_login() {
+    var username = $("#username").val();
+    var password = $("#password").val();
+    data = {
+      "username":username,
+      "password":password
+    };
+    var dataToSend = JSON.stringify(data);
+    $.ajax({
+        url:'/',
+        type:'post',
+        data:dataToSend,
+        success:function(res) {
+          var jsonRes = JSON.parse(res);
+          if(jsonRes['LoggedIn'] === "True") {
+            alert("Logged in");
+            // window.location.href = "/Index"
+          }
+          else
+            alert("Incorrect credentials")
+        }
+      });
+  }
+
+  function admin_clear_table() {
+
+    $("#dr_results_body tr").remove();
+
+  }
+
+  function admin_show_edit_info() {
+    $("#edit_user_div").css("display", "block");
+  }
+
+  function admin_hide_edit_info() {
+    $("#edit_user_div").css("display", "none");
+  }
+
+  function admin_edit_user() {
+
+    var formData = $("#edit_user_form").serializeArray();
+    var username = "drbob01"; //need to use cookies to get username
+
+    var request_data = {};
+    if(formData[0].value != "") {
+      request_data['username'] = formData[0].value;
+    }
+    if(formData[1].value != "") {
+      request_data['password'] = formData[1].value;
+    }
+    if(formData[2].value != "") {
+      request_data['name'] = formData[2].value;
+    }
+    if(formData[3].value != "") {
+      request_data['hospital_name'] = formData[3].value;
+    }
+    if(formData[4].value != "") {
+      request_data['hospital_address'] = formData[4].value;
+    }
+    if(formData[5].value != "") {
+      request_data['hospital_city'] = formData[5].value;
+    }
+
+    var theUrl = "https://private-ca334-bilicam.apiary-mock.com/account/";
+    theUrl += username;
+
+    $.ajax({
+      url : theUrl,
+      type: "put",
+      request : request_data,
+      success: function(data)
+      {
+        alert("Edited user " + username);
+        location.reload();
+      },
+    });
+
+  }
+
+  function admin_delete_user() { //probably needs some kind of extra authorization
+    var username = "drbob01";
+
+    var theUrl = "https://private-ca334-bilicam.apiary-mock.com/account/";
+    theUrl += username;
+
+    request_data = {};
+    request_data['username'] = "admin";
+    request_data['password'] = "password";
+
+    /*
+    $.ajax({
+      url : theUrl,
+      type: "delete",
+      request: request_data,
+      success: function(data)
+      {
+        alert("Deleted user " + username);
+        location.reload(); //send to homepage
+      },
+    });*/
+  }
