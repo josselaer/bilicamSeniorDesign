@@ -17,7 +17,7 @@ class BaseHandler(tornado.web.RequestHandler):
 
 class CreateUser(BaseHandler):
     """Create User"""
-
+    @tornado.web.authenticated
     def get(self):
         self.render("admin_create_user.html")
     # Have to use async since the database call is asynchronous.
@@ -36,12 +36,38 @@ class CreateUser(BaseHandler):
             response = {"CreatedUser": "True"}
             self.write(json.dumps(response))
 
-#class IndexHandler(BaseHandler):
-    # """Index Page"""
+class SearchByUserHandler(BaseHandler):
+    """Search by User"""
+    async def get(self):
+        data = urllib.parse.parse_qs(self.request.query)
+        username = data["dr_username"][0]
+        document = await db.patients.find_one({"username":username})
+        if document != None:
+            dataToSend = {"username": document["username"], "name": document["name"]}
+            self.set_cookie("username", str(document["username"]).replace(" ", "|"))
+            self.set_cookie("name", str(document["name"]).replace(" ", "|"))
+            self.set_cookie("hospital", str(document["hospital"]).replace(" ", "|"))
+            self.set_cookie("hospitalAddress", str(document["hospitalAddress"]).replace(" ", "|"))
+            self.set_cookie("city", str(document["city"]).replace(" ", "|"))
+            self.write(json.dumps(dataToSend))
 
-  #  @tornado.web.authenticated
-   # def get(self):
-    #    self.render("index.html")
+class AccountInfoHandler(BaseHandler):
+    """Account Info"""
+    def get(self):
+        username = self.get_cookie("username").replace("|", " ")
+        name = self.get_cookie("name").replace("|", " ")
+        hospital = self.get_cookie("hospital").replace("|", " ")
+        address = self.get_cookie("hospitalAddress").replace("|", " ")
+        city = self.get_cookie("city").replace("|", " ")
+        self.render("admin_account_info.html", Username = username, Name = name, Hospital = hospital,
+                    Address = address, City = city)
+
+class IndexHandler(BaseHandler):
+    """Index Page"""
+
+    @tornado.web.authenticated
+    def get(self):
+        self.render("admin_search.html")
 
 class LoginHandler(BaseHandler):
     """Login Page"""
@@ -49,8 +75,8 @@ class LoginHandler(BaseHandler):
     def get(self):
         if not self.current_user:
             self.render("admin_login.html")
-        #else:
-            #self.redirect("")
+        else:
+            self.redirect("/Index")
     # Have to use async since the database call is asynchronous.
     async def post(self):
         data = tornado.escape.json_decode(self.request.body)
@@ -66,14 +92,6 @@ class LoginHandler(BaseHandler):
         else:
             response = {"LoggedIn": "False"}
             self.write(json.dumps(response))
-
-
-#class IndexHandler(BaseHandler):
-    # """Index Page"""
-
-  #  @tornado.web.authenticated
-   # def get(self):
-    #    self.render("index.html")
 
 class LogoutHandler(tornado.web.RequestHandler):
     def get(self):
@@ -97,6 +115,9 @@ app = tornado.web.Application([
     (r"/", LoginHandler),
     (r"/Logout", LogoutHandler),
     (r"/CreateUser", CreateUser),
+    (r"/Index", IndexHandler),
+    (r"/SearchByUser", SearchByUserHandler),
+    (r"/Info", AccountInfoHandler),
 ], db=db, **settings)
 
 if __name__ == "__main__":

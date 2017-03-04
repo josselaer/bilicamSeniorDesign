@@ -248,16 +248,18 @@ function search_patient() {
   }
 
   function admin_search_by_user(formData) {
-    //acount/{username}
     var dr_username = formData[1].value;
-    theUrl += dr_username;
+    dataToSend = {
+        "dr_username":dr_username
+    };
     $.ajax({
-      url: theUrl,
+      url: "/SearchByUser",
       type: "get",
       async: false,
-      success: function(data) {
-        admin_create_table(data,0);
-        //console.log(data);
+      data: dataToSend,
+      success: function(res) {
+        var jsonRes = JSON.parse(res);
+        admin_create_table(jsonRes,0);
       }
     });
 
@@ -319,7 +321,6 @@ function search_patient() {
       http://stackoverflow.com/questions/17147821/how-to-make-a-whole-row-in-a-table-clickable-as-a-link
     */
     //{username: "drbob01", name: "Dr. Bob Kelso", hospital: "Sacred Heart", hospitalAddress: "123 N. Hos Lane", city: "Dallas, TX"}
-    console.log(data);
     if(is_array == 1) { //search by name
       for(var i = 0; i < data.length; i++) {
         add_table_row(data[i]);
@@ -350,8 +351,7 @@ function search_patient() {
             {
                 return function() {
                                         var dr_username = temp; //need to use cookie here
-                                        console.log(dr_username);
-                                        window.location.href = "admin_account_info.html";
+                                        window.location.href = "/Info";
                                  };
             };
 
@@ -398,7 +398,7 @@ function search_patient() {
           var jsonRes = JSON.parse(res);
           if(jsonRes['LoggedIn'] === "True") {
             alert("Logged in");
-            // window.location.href = "/Index"
+            window.location.href = "/Index"
           }
           else
             alert("Incorrect credentials")
@@ -423,8 +423,6 @@ function search_patient() {
   function admin_edit_user() {
 
     var formData = $("#edit_user_form").serializeArray();
-    var username = "drbob01"; //need to use cookies to get username
-
     var request_data = {};
     if(formData[0].value != "") {
       request_data['username'] = formData[0].value;
@@ -444,12 +442,8 @@ function search_patient() {
     if(formData[5].value != "") {
       request_data['hospital_city'] = formData[5].value;
     }
-
-    var theUrl = "https://private-ca334-bilicam.apiary-mock.com/account/";
-    theUrl += username;
-
     $.ajax({
-      url : theUrl,
+      url : "/EditUser",
       type: "put",
       request : request_data,
       success: function(data)
