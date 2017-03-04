@@ -249,7 +249,6 @@ function search_patient() {
 
   function admin_search_by_user(formData) {
     //acount/{username}
-    var theUrl = "https://private-ca334-bilicam.apiary-mock.com/account/";
     var dr_username = formData[1].value;
     theUrl += dr_username;
     $.ajax({
@@ -290,27 +289,26 @@ function search_patient() {
     var hospital = formData[3].value;
     var hospitalAddress = formData[4].value;
     var city = formData[5].value;
-    var postForm = {};
-    postForm["username"] = username;
-    postForm["password"] = password;
-    postForm["name"] = name;
-    postForm["hospital"] = hospital;
-    postForm["hospitalAddress"] = hospitalAddress;
-    postForm["city"] = city;
-    console.log(postForm);
-
-    var theUrl = "https://private-ca334-bilicam.apiary-mock.com/account";
-
+    data = {
+        "username":username,
+        "password":password,
+        "name":name,
+        "hospital":hospital,
+        "hospitalAddress":hospitalAddress,
+        "city":city
+    };
+    var dataToSend = JSON.stringify(data);
     $.ajax({
-      url : theUrl,
-      type: "POST",
-      body : formData,
-      success: function(data)
-      {
-        alert("Create user " + username);
-      },
+      url:'/CreateUser',
+      type:'post',
+      data:dataToSend,
+      success:function(res) {
+        var jsonRes = JSON.parse(res);
+        if(jsonRes['CreatedUser'] === "True") {
+            alert("User Created");
+        }
+      }
     });
-
   }
 
   function admin_create_table(data, is_array) {
@@ -383,7 +381,6 @@ function search_patient() {
 
     table.appendChild(tr);*/
   }
-
 
   function admin_login() {
     var username = $("#username").val();
