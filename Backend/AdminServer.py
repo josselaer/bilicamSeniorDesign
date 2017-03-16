@@ -69,6 +69,9 @@ class AccountInfoHandler(BaseHandler):
     """Account Info"""
     @tornado.web.authenticated
     def get(self):
+        if self.get_cookie("Checked") == "Yes":
+            self.redirect("/Index")
+            return
         username = self.get_cookie("username").replace("|", " ")
         name = self.get_cookie("name").replace("|", " ")
         hospital = self.get_cookie("hospital").replace("|", " ")
@@ -101,6 +104,7 @@ class DeleteUserHandler(BaseHandler):
     async def delete(self):
         username = self.get_cookie("username").replace("|", " ")
         document = await db.patients.delete_one({"username":username})
+        self.set_cookie("Checked", "Yes")
         response = {"Username":username}
         self.write(json.dumps(response))
 
@@ -129,6 +133,7 @@ class LoginHandler(BaseHandler):
         # Need to add cookies or another authentication method
         if document != None:
             self.set_secure_cookie("Admin", username)
+            self.set_cookie("Checked", "No")
             response = {"LoggedIn": "True"}
             self.write(json.dumps(response))
         else:
