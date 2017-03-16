@@ -266,21 +266,17 @@ function search_patient() {
   }
 
   function admin_search_by_name(formData) {
-    //account/name/{last_name}
-    //http://private-ca334-bilicam.apiary-mock.com
-    var theUrl = "https://private-ca334-bilicam.apiary-mock.com/account/name/";
     var dr_name = formData[2].value;
-    theUrl = theUrl + dr_name;
+    dataToSend = {"name":dr_name};
     $.ajax({
-      url: theUrl,
+      url: "/SearchByName",
       type: "get",
-      async: false,
-      success: function(data) {
-        admin_create_table(data,1);
-        //console.log(data);
+      data: dataToSend,
+      success: function(res) {
+        var jsonRes = JSON.parse(res);
+        admin_create_table(jsonRes,1);
       }
     });
-
   }
 
   function admin_create_user() {
@@ -314,25 +310,8 @@ function search_patient() {
   }
 
   function admin_create_table(data, is_array) {
-    //use cookies to pass username when user is selected
-    /*
-      table format: username, name, select button
-      or make select button the whole table row
-      http://stackoverflow.com/questions/17147821/how-to-make-a-whole-row-in-a-table-clickable-as-a-link
-    */
-    //{username: "drbob01", name: "Dr. Bob Kelso", hospital: "Sacred Heart", hospitalAddress: "123 N. Hos Lane", city: "Dallas, TX"}
-    if(is_array == 1) { //search by name
-      for(var i = 0; i < data.length; i++) {
-        add_table_row(data[i]);
-      }
-    }
-    else { //search by user
       add_table_row(data);
-    }
       $("#dr_results_table").css("display", "block");
-
-
-
   }
 
   function add_table_row(data) {
@@ -442,38 +421,30 @@ function search_patient() {
     if(formData[5].value != "") {
       request_data['hospital_city'] = formData[5].value;
     }
+    dataToSend = JSON.stringify(request_data);
     $.ajax({
       url : "/EditUser",
       type: "put",
-      request : request_data,
-      success: function(data)
+      data: dataToSend,
+      success: function(res)
       {
-        alert("Edited user " + username);
-        location.reload();
+        var jsonRes = JSON.parse(res);
+        alert("Edited user " + jsonRes["Username"]);
+        window.location.href = "/Info";
       },
     });
 
   }
 
   function admin_delete_user() { //probably needs some kind of extra authorization
-    var username = "drbob01";
-
-    var theUrl = "https://private-ca334-bilicam.apiary-mock.com/account/";
-    theUrl += username;
-
-    request_data = {};
-    request_data['username'] = "admin";
-    request_data['password'] = "password";
-
-    /*
     $.ajax({
-      url : theUrl,
+      url : "/DeleteUser",
       type: "delete",
-      request: request_data,
-      success: function(data)
+      success: function(res)
       {
-        alert("Deleted user " + username);
-        location.reload(); //send to homepage
+        var jsonRes = JSON.parse(res);
+        alert("Deleted user " + jsonRes["Username"]);
+        window.location.href = "/Index";
       },
-    });*/
+    });
   }

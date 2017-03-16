@@ -51,8 +51,23 @@ class SearchByUserHandler(BaseHandler):
             self.set_cookie("city", str(document["city"]).replace(" ", "|"))
             self.write(json.dumps(dataToSend))
 
+class SearchByNameHandler(BaseHandler):
+    async def get(self):
+        data = urllib.parse.parse_qs(self.request.query)
+        name = data["name"][0]
+        document = await db.patients.find_one({"name":name})
+        if document != None:
+            dataToSend = {"username": document["username"], "name": document["name"]}
+            self.set_cookie("username", str(document["username"]).replace(" ", "|"))
+            self.set_cookie("name", str(document["name"]).replace(" ", "|"))
+            self.set_cookie("hospital", str(document["hospital"]).replace(" ", "|"))
+            self.set_cookie("hospitalAddress", str(document["hospitalAddress"]).replace(" ", "|"))
+            self.set_cookie("city", str(document["city"]).replace(" ", "|"))
+            self.write(json.dumps(dataToSend))
+
 class AccountInfoHandler(BaseHandler):
     """Account Info"""
+    @tornado.web.authenticated
     def get(self):
         username = self.get_cookie("username").replace("|", " ")
         name = self.get_cookie("name").replace("|", " ")
@@ -61,6 +76,33 @@ class AccountInfoHandler(BaseHandler):
         city = self.get_cookie("city").replace("|", " ")
         self.render("admin_account_info.html", Username = username, Name = name, Hospital = hospital,
                     Address = address, City = city)
+
+class EditUserHandler(BaseHandler):
+    async def put(self):
+        data = tornado.escape.json_decode(self.request.body )
+        username = data["username"]
+        password = data["password"]
+        name = data["name"]
+        hospital_name = data["hospital_name"]
+        hospital_address = data["hospital_address"]
+        hospital_city = data["hospital_city"]
+        old_username = self.get_cookie("username").replace("|", " ")
+        document = await db.patients.update_one({"username":old_username}, {"$set":{"username":username, "password":password, "hospital":hospital_name,
+                                                                                    "hospitalAddress":hospital_address, "city":hospital_city, "name":name}})
+        self.set_cookie("username", username.replace(" ", "|"))
+        self.set_cookie("name", name.replace(" ", "|"))
+        self.set_cookie("hospital", hospital_name.replace(" ", "|"))
+        self.set_cookie("hospitalAddress", hospital_address.replace(" ", "|"))
+        self.set_cookie("city", hospital_city.replace(" ", "|"))
+        response = {"Username":username}
+        self.write(json.dumps(response))
+
+class DeleteUserHandler(BaseHandler):
+    async def delete(self):
+        username = self.get_cookie("username").replace("|", " ")
+        document = await db.patients.delete_one({"username":username})
+        response = {"Username":username}
+        self.write(json.dumps(response))
 
 class IndexHandler(BaseHandler):
     """Index Page"""
@@ -118,6 +160,9 @@ app = tornado.web.Application([
     (r"/Index", IndexHandler),
     (r"/SearchByUser", SearchByUserHandler),
     (r"/Info", AccountInfoHandler),
+    (r"/EditUser", EditUserHandler),
+    (r"/DeleteUser", DeleteUserHandler),
+    (r"/SearchByName", SearchByNameHandler),
 ], db=db, **settings)
 
 if __name__ == "__main__":
