@@ -29,11 +29,13 @@
       });
 }
 
-function download_csv(filename, text) {
-  
-  
+*/
 
-}*/
+function download_csv(data) {
+  //var filename = "../" + data;
+  $('#download_csv').attr("href", data);
+  $('#download_csv')[0].click();
+}
 
 function fill_table(data) {
 
@@ -179,14 +181,22 @@ function search_patient() {
     if(isNaN(num1) || isNaN(num2)) {
       alert("Must enter a number value");
     }
+    else if(num1 < 0 || num1 > 30) {
+      alert("Number must be between 0 and 30");
+    }
+    else if(num2 < 0 || num2 > 30) {
+      alert("Number must be between 0 and 30");
+    }
+    else if(num1 > num2) {
+      alert("The second number must be greater than the first");
+    }
     else {
       $.ajax({
         url: theUrl,
         type: "get",
         async: false,
         success: function(data) {
-          alert("There are " + data.length + " results. Click download to download .csv file");
-          console.log(data);
+          download_csv(data);
         },
         error: function() {
           console.log(theUrl);
@@ -202,32 +212,38 @@ function search_patient() {
     var firstName = formData[2].value;
     var lastName = formData[3].value;
     theUrl += firstName + "/" + lastName;
-
-    $.ajax({
-      url: theUrl,
-      type: "get",
-      async: false,
-      success: function(data) {
-        fill_table(data);
-        //console.log(data);
-      }
-    });
+    if(firstName == "" || lastName == "") {
+      alert("Must enter a value for the names");
+    }
+    else {
+      $.ajax({
+        url: theUrl,
+        type: "get",
+        async: false,
+        success: function(data) {
+          download_csv(data);
+        }
+      });
+    }
   }
 
   function search_by_id(formData) {
   var theUrl = "https://private-ca334-bilicam.apiary-mock.com/patient/id/";
     var idNum = formData[1].value;
     theUrl += idNum;
-
-    $.ajax({
-      url: theUrl,
-      type: "get",
-      async: false,
-      success: function(data) {
-        fill_table(data);
-        //console.log(data);
-      }
-    });
+    if(idNum == "") {
+      alert("Must enter a value for the ID");
+    }
+    else {
+      $.ajax({
+        url: theUrl,
+        type: "get",
+        async: false,
+        success: function(data) {
+          download_csv(data);
+        }
+      });
+    }
 
   }
 
@@ -253,8 +269,7 @@ function search_patient() {
         type: "get",
         async: false,
         success: function(data) {
-          alert("There are " + data.length + " results. Click download to download .csv file");
-          console.log(data);
+          download_csv(data);
         }
       });
 
@@ -269,20 +284,22 @@ function search_patient() {
     var date2 = formData[formData.length-1].value;
     date1 = date1.replace(/\//g,'-');
     date2 = date2.replace(/\//g,'-');
-    var theUrl = 'https://private-ca334-bilicam.apiary-mock.com/patient/date/'
+    var theUrl = 'https://private-ca334-bilicam.apiary-mock.com/patient/date/';
 
     theUrl += date1 + "/" + date2;
-
-    $.ajax({
-        url: theUrl,
-        type: "get",
-        async: false,
-        success: function(data) {
-          alert("There are " + data.length + " results. Click download to download .csv file");
-          console.log(data);
-        }
-      });
-
+    if(date1 == "" || date2 == "") {
+      alert("Must enter a value for the dates");
+    }
+    else {
+      $.ajax({
+          url: theUrl,
+          type: "get",
+          async: false,
+          success: function(data) {
+            download_csv(data);
+          }
+        });
+    }
   }
   
 
