@@ -1,7 +1,9 @@
 //http://private-ca334-bilicam.apiary-mock.com
 
-function make_csv(data) {
-
+function download_csv(data) {
+  //var filename = "../" + data;
+  $('#download_csv').attr("href", data);
+  $('#download_csv')[0].click();
 }
 
 function fill_table(data) {
@@ -76,7 +78,8 @@ function search_patient() {
         async: false,
         data:dataToSend,
         success: function(data) {
-          console.log(data);
+          console.log(data['filename']);
+          download_csv(data['filename']);
         }
       });
 
@@ -143,7 +146,6 @@ function search_patient() {
         async: false,
         data:dataToSend,
         success: function(data) {
-          alert("There are " + data.length + " results. Click download to download .csv file");
           console.log(data);
         }
       });

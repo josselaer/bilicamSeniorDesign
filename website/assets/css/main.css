@@ -62,8 +62,8 @@
 		display:block;
 	}*/
 
-	#download {
-		float:right;
+	#download_csv {
+		/*display:none;*/
 	}
 
 	#Submit {

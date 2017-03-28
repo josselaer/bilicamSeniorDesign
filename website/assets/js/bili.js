@@ -150,6 +150,7 @@ function search_patient() {
     {name: "second_number", value: ""}, 
     {name: "eWhite", value: "on"}]
     */
+    //$('#download_csv')[0].click();
     var search_type = formData[0].value;
     if(search_type == "bilirubin") {
       search_by_bili(formData);

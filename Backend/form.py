@@ -97,8 +97,8 @@ def bili_to_csv(json_obj):
         csv_txt = csv_txt + json_to_csv(json_obj)
     else:
         csv_txt = "error"
-
-    f = open(filename, 'w')
+    name_temp = settings['template_path'] + filename
+    f = open(name_temp, 'w')
     f.write(csv_txt)
     f.close()
     return filename
