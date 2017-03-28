@@ -2,7 +2,9 @@
 
 function download_csv(data) {
   //var filename = "../" + data;
-  $('#download_csv').attr("href", data);
+  //"csv_download/filename.csv"
+  var filename = "/CsvDownload/" + data;
+  $('#download_csv').attr("href", filename);
   $('#download_csv')[0].click();
 }
 
@@ -78,7 +80,7 @@ function search_patient() {
         async: false,
         data:dataToSend,
         success: function(data) {
-          console.log(data['filename']);
+          //console.log(data['filename']);
           download_csv(data['filename']);
         }
       });

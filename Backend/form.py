@@ -46,6 +46,14 @@ class IndexHandler(BaseHandler):
     def get(self):
         self.render("index.html")
 
+class CsvHandler(tornado.web.RequestHandler):
+    """Csv Page"""
+    def get(self, csv_file):
+        #data = urllib.parse.parse_qs(self.request.query)
+        filename = "csv_download/" + csv_file
+        print(filename)
+        self.render(filename)
+
 class SearchByBiliHandler(tornado.web.RequestHandler):
     async def get(self):
         data = urllib.parse.parse_qs(self.request.query)
@@ -54,7 +62,7 @@ class SearchByBiliHandler(tornado.web.RequestHandler):
         cursor = db.patients.find({"bilirubin":{"$gt":num1, "$lt":num2}})
         document = await cursor.to_list(length=100)
         filename = bili_to_csv(document)
-        print(filename)
+        #print(filename)
         self.write({"filename":filename})
 
 class SearchByNameHandler(tornado.web.RequestHandler):
@@ -88,7 +96,7 @@ class LogoutHandler(tornado.web.RequestHandler):
         self.redirect("/")
 
 def bili_to_csv(json_obj):
-    filename = "csv_download/" + str(randint(100,999999)) + ".csv"
+    filename = str(randint(100,999999)) + ".csv"
     csv_txt = "Name,ID,Bilirubin Value,Ethnicity,Date,Images\n"
     if(type(json_obj) == list):
         for x in json_obj:
@@ -97,7 +105,7 @@ def bili_to_csv(json_obj):
         csv_txt = csv_txt + json_to_csv(json_obj)
     else:
         csv_txt = "error"
-    name_temp = settings['template_path'] + filename
+    name_temp = settings['template_path'] + "csv_download/" + filename
     f = open(name_temp, 'w')
     f.write(csv_txt)
     f.close()
@@ -129,6 +137,7 @@ ssl_ctx.load_cert_chain("server.crt", "server.key")
 app = tornado.web.Application([
     (r"/", LoginHandler),
     (r"/Index", IndexHandler),
+    (r"/CsvDownload/([^/]+)", CsvHandler),
     (r"/SearchByBili", SearchByBiliHandler),
     (r"/SearchByName", SearchByNameHandler),
     (r"/SearchById", SearchByIdHandler),
