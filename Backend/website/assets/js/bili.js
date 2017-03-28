@@ -76,7 +76,7 @@ function search_patient() {
         async: false,
         data:dataToSend,
         success: function(data) {
-          alert("There are " + data.length + " results. Click download to download .csv file");
+          console.log(data);
         }
       });
 
@@ -97,8 +97,8 @@ function search_patient() {
       async: false,
       data:dataToSend,
       success: function(data) {
-        fill_table(data);
-        //console.log(data);
+        //fill_table(data);
+        console.log(data);
       }
     });
   }
@@ -114,8 +114,8 @@ function search_patient() {
       async: false,
       data:dataToSend,
       success: function(data) {
-        fill_table(data);
-        //console.log(data);
+        //fill_table(data);
+        console.log(data);
       }
     });
 

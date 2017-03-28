@@ -10,7 +10,7 @@ import ssl
 import csv
 from random import randint
 
-db = motor.motor_tornado.MotorClient().Bilirubin
+db = motor.motor_tornado.MotorClient().bili
 
 class BaseHandler(tornado.web.RequestHandler):
     def get_current_user(self):
@@ -54,7 +54,8 @@ class SearchByBiliHandler(tornado.web.RequestHandler):
         cursor = db.patients.find({"bilirubin":{"$gt":num1, "$lt":num2}})
         document = await cursor.to_list(length=100)
         filename = bili_to_csv(document)
-        return filename
+        print(filename)
+        self.write({"filename":filename})
 
 class SearchByNameHandler(tornado.web.RequestHandler):
     async def get(self):
@@ -62,7 +63,7 @@ class SearchByNameHandler(tornado.web.RequestHandler):
         name = str(data["name"][0]).strip()
         document = await db.patients.find_one({"name":name})
         filename = bili_to_csv(document)
-        return filename
+        self.write({"filename":filename})
 
 class SearchByIdHandler(tornado.web.RequestHandler):
     async def get(self):
@@ -70,7 +71,7 @@ class SearchByIdHandler(tornado.web.RequestHandler):
         num = int(data["idNum"][0])
         document = await db.patients.find_one({"id":num})
         filename = bili_to_csv(document)
-        return filename
+        self.write({"filename":filename})
 
 class SearchByEthnicityHandler(tornado.web.RequestHandler):
     async def get(self):
@@ -79,7 +80,7 @@ class SearchByEthnicityHandler(tornado.web.RequestHandler):
         cursor = db.patients.find({"ethnicity":{"$in":ethnicities}})
         document = await cursor.to_list(length=100)
         filename = bili_to_csv(document)
-        return filename
+        self.write({"filename":filename})
 
 class LogoutHandler(tornado.web.RequestHandler):
     def get(self):
@@ -114,8 +115,8 @@ def json_to_csv(json_obj):
     return csv_txt
 
 settings = {
-    "template_path":os.path.dirname(os.path.realpath(__file__)) + "\\website\\",
-    "static_path":os.path.dirname(os.path.realpath(__file__)) + "\\website\\assets\\",
+    "template_path":os.path.dirname(os.path.realpath(__file__)) + "/website/",
+    "static_path":os.path.dirname(os.path.realpath(__file__)) + "/website/assets/",
     "debug":True,
     "cookie_secret":os.urandom(32),
     "login_url":"/"
