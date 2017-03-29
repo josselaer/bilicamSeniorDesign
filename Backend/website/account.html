@@ -9,10 +9,10 @@
 		<title>Bilicam</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<!--[if lte IE 8]><script src="assets/js/ie/html5shiv.js"></script><![endif]-->
-		<link rel="stylesheet" href="assets/css/main.css" />
-		<!--[if lte IE 9]><link rel="stylesheet" href="assets/css/ie9.css" /><![endif]-->
-		<!--[if lte IE 8]><link rel="stylesheet" href="assets/css/ie8.css" /><![endif]-->
+		<!--[if lte IE 8]><script src="{{static_url("js/ie/html5shiv.js")}}"></script><![endif]-->
+		<link rel="stylesheet" href="{{static_url("css/main.css")}}" />
+		<!--[if lte IE 9]><link rel="stylesheet" href="{static_url("css/ie9.css")}}" /><![endif]-->
+		<!--[if lte IE 8]><link rel="stylesheet" href="{static_url("css/ie8.css")}}" /><![endif]-->
 	</head>
 	<body>
 		<!-- Wrapper -->
@@ -23,7 +23,7 @@
 						<div class="inner">
 
 							<!-- Logo -->
-								<a href="index.html" class="logo">
+								<a href="/Index" class="logo">
 									<!--<span class="symbol"><img src="images/logo.svg" alt="" /></span>-->
 									<span class="title">Bilicam</span>
 								</a>
@@ -42,11 +42,10 @@
 					<nav id="menu">
 						<h2>Menu</h2>
 						<ul>
-							<li><a href="index.html">Home</a></li>
-							<li><a href="account.html">Account Information</a></li>
+							<li><a href="/Index">Home</a></li>
 							<!--<li><a href="generic.html">Consequat dolor</a></li>
 							<li><a href="elements.html">Elements</a></li>-->
-							<li><a href="login.html">Logout</a></li>
+							<li><a href="/Logout">Logout</a></li>
 						</ul>
 					</nav>
 
@@ -54,7 +53,7 @@
 					<div id="main">
 						<div class="inner">
 							<section>
-								<h3>Username: drbob1</h3>
+								<h3>Username: {{Username}}</h3>
 								<div id="edit_user_div">
 									<form action="javascript:edit_user()" id="edit_user_form">
 										<div class="field">
@@ -82,10 +81,10 @@
 								</div>
 								<div class="field first half">
 										<ul class="alt" id="dr_info_list">
-											<!--<li>Dr. Robert Doe</li>
-											<li>St. Judes Hospital</li>
-											<li>123 N. Hospital Lane</li>
-											<li>Dallas, TX</li>-->
+											<li>{{Name}}</li>
+											<li>{{Hospital}}</li>
+											<li>{{Address}}</li>
+											<li>{{City}}</li>
 										</ul>
 								</div>
 								<div class="row">
@@ -112,13 +111,12 @@
 			</div>
 
 		<!-- Scripts -->
-			<script src="assets/js/jquery.min.js"></script>
-			<script src="assets/js/skel.min.js"></script>
-			<script src="assets/js/util.js"></script>
-			<!--[if lte IE 8]><script src="assets/js/ie/respond.min.js"></script><![endif]-->
-			<script src="assets/js/main.js"></script>
-			<script src="assets/js/account_info.js"></script>
-			<script src="assets/js/bili.js"></script>
-
+			<script src="{{static_url("js/jquery.min.js")}}"></script>
+			<script src="{{static_url("js/skel.min.js")}}"></script>
+			<script src="{{static_url("js/util.js")}}"></script>
+			<!--[if lte IE 8]><script src="{{static_url("js/ie/respond.min.js")}}"></script><![endif]-->
+			<script src="{{static_url("js/main.js")}}"></script>
+			<!--<script src="{{static_url("js/account_info.js")}}"></script>-->
+			<script src="{{static_url("js/bili.js")}}"></script>
 	</body>
 </html>

@@ -53,18 +53,16 @@ function edit_user() {
     if(formData[4].value != "") {
       request_data['hospital_city'] = formData[4].value;
     }
-
-    var theUrl = "https://private-ca334-bilicam.apiary-mock.com/account/";
-    theUrl += username;
-
+    dataToSend = JSON.stringify(request_data);
     $.ajax({
-      url : theUrl,
+      url : "/EditUser",
       type: "put",
-      request : request_data,
-      success: function(data)
+      data: dataToSend,
+      success: function(res)
       {
-        alert("Edited user " + username);
-        location.reload();
+        var jsonRes = JSON.parse(res);
+        alert("Edited user " + jsonRes["Username"]);
+        window.location.href = "/Account"
       },
     });
 }
@@ -78,23 +76,19 @@ function change_password() {
   }
   else {
     request_data['password'] = formData[0].value;
-
-    var theUrl = "https://private-ca334-bilicam.apiary-mock.com/account/";
-    theUrl += username;
-
+    dataToSend = JSON.stringify(request_data);
     $.ajax({
-      url : theUrl,
+      url : "/ChangePassword",
       type: "put",
-      request : request_data,
-      success: function(data)
+      data: dataToSend,
+      success: function(res)
       {
-        alert("Edited user " + username);
-        location.reload();
+        var jsonRes = JSON.parse(res);
+        alert("Edited user " + jsonRes["Username"]);
+        window.location.href = "/Account"
       },
     });
-
   }
-
 }
 
 function show_change_password() {
@@ -261,19 +255,19 @@ function search_patient() {
 
     var date1 = formData[formData.length-2].value;
     var date2 = formData[formData.length-1].value;
-    date1 = date1.replace(/\//g,'-');
-    date2 = date2.replace(/\//g,'-');
-    var theUrl = 'https://private-ca334-bilicam.apiary-mock.com/patient/date/';
-
-    theUrl += date1 + "/" + date2;
+    dataToSend = {
+      "date1":date1,
+      "date2":date2
+    };
     if(date1 == "" || date2 == "") {
-      alert("Must enter a value for the dates");
+      alert("You must enter a date for both");
     }
     else {
       $.ajax({
-          url: theUrl,
+          url: "/SearchByDate",
           type: "get",
           async: false,
+          data:dataToSend,
           success: function(data) {
             download_csv(data['filename']);
           }
