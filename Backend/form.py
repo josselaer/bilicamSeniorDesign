@@ -51,7 +51,7 @@ class CsvHandler(tornado.web.RequestHandler):
     def get(self, csv_file):
         #data = urllib.parse.parse_qs(self.request.query)
         filename = "csv_download/" + csv_file
-        print(filename)
+        #print(filename)
         self.render(filename)
 
 class SearchByBiliHandler(tornado.web.RequestHandler):

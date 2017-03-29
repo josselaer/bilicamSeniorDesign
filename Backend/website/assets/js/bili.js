@@ -28,6 +28,84 @@ function fill_table(data) {
 
 }
 
+function edit_user() {
+  var formData = $("#edit_user_form").serializeArray();
+  var username = "drbob01"; //need to use cookies to get username
+    /*[{name: "username", value: "asdf"}, 
+    {name: "name", value: "jake"}, 
+    {name: "hospital_name", value: "nkfla"}, 
+    {name: "hospital_address", value: "nksfdlj"}, 
+    {name: "hospital_city", value: "kljadfsj"}] (6)*/
+
+    var request_data = {};
+    if(formData[0].value != "") {
+      request_data['username'] = formData[0].value;
+    }
+    if(formData[1].value != "") {
+      request_data['name'] = formData[1].value;
+    }
+    if(formData[2].value != "") {
+      request_data['hospital_name'] = formData[2].value;
+    }
+    if(formData[3].value != "") {
+      request_data['hospital_address'] = formData[3].value;
+    }
+    if(formData[4].value != "") {
+      request_data['hospital_city'] = formData[4].value;
+    }
+
+    var theUrl = "https://private-ca334-bilicam.apiary-mock.com/account/";
+    theUrl += username;
+
+    $.ajax({
+      url : theUrl,
+      type: "put",
+      request : request_data,
+      success: function(data)
+      {
+        alert("Edited user " + username);
+        location.reload();
+      },
+    });
+}
+
+function change_password() {
+  var formData = $("#change_password_form").serializeArray();
+  var username = "drbob01";
+  var request_data = {};
+  if(formData[0].value != formData[1].value) {
+    alert('Passwords do not match');
+  }
+  else {
+    request_data['password'] = formData[0].value;
+
+    var theUrl = "https://private-ca334-bilicam.apiary-mock.com/account/";
+    theUrl += username;
+
+    $.ajax({
+      url : theUrl,
+      type: "put",
+      request : request_data,
+      success: function(data)
+      {
+        alert("Edited user " + username);
+        location.reload();
+      },
+    });
+
+  }
+
+}
+
+function show_change_password() {
+  $("#change_password_div").css("display", "block");
+}
+
+function hide_change_password() {
+  $("#change_password_div").css("display", "none");
+}
+
+
 function search_patient() {
     var formData = $("#search_form").serializeArray();
     /* 6
@@ -60,6 +138,9 @@ function search_patient() {
     else if(search_type == "by_name") {
       search_by_name(formData);
     }
+    else if(search_type == "by_date") {
+      search_by_date(formData);
+    }
 
 }
 
@@ -68,6 +149,15 @@ function search_patient() {
     var num2 = parseFloat(formData[5].value);
     if(isNaN(num1) || isNaN(num2)) {
       alert("Must enter a number value");
+    }
+    else if(num1 < 0 || num1 > 30) {
+      alert("Number must be between 0 and 30");
+    }
+    else if(num2 < 0 || num2 > 30) {
+      alert("Number must be between 0 and 30");
+    }
+    else if(num1 > num2) {
+      alert("The second number must be greater than the first");
     }
     else {
       dataToSend = {
@@ -96,16 +186,21 @@ function search_patient() {
     dataToSend = {
       "name":name
     };
-    $.ajax({
-      url: "/SearchByName",
-      type: "get",
-      async: false,
-      data:dataToSend,
-      success: function(data) {
-        //fill_table(data);
-        console.log(data);
-      }
-    });
+    if(firstName == "" || lastName == "") {
+      alert("Must enter a value for the names");
+    }
+    else {
+      $.ajax({
+        url: "/SearchByName",
+        type: "get",
+        async: false,
+        data:dataToSend,
+        success: function(data) {
+          //fill_table(data);
+          download_csv(data['filename']);
+        }
+      });
+    }
   }
 
   function search_by_id(formData) {
@@ -113,16 +208,21 @@ function search_patient() {
     dataToSend = {
       "idNum":idNum
     };
-    $.ajax({
-      url: "/SearchById",
-      type: "get",
-      async: false,
-      data:dataToSend,
-      success: function(data) {
-        //fill_table(data);
-        console.log(data);
-      }
-    });
+    if(idNum == "") {
+      alert("Must enter a value for the ID");
+    }
+    else {
+      $.ajax({
+        url: "/SearchById",
+        type: "get",
+        async: false,
+        data:dataToSend,
+        success: function(data) {
+          //fill_table(data);
+          download_csv(data['filename']);
+        }
+      });
+    }
 
   }
 
@@ -148,13 +248,37 @@ function search_patient() {
         async: false,
         data:dataToSend,
         success: function(data) {
-          console.log(data);
+          download_csv(data['filename']);
         }
       });
 
 
     }
 
+  }
+
+  function search_by_date(formData) {
+
+    var date1 = formData[formData.length-2].value;
+    var date2 = formData[formData.length-1].value;
+    date1 = date1.replace(/\//g,'-');
+    date2 = date2.replace(/\//g,'-');
+    var theUrl = 'https://private-ca334-bilicam.apiary-mock.com/patient/date/';
+
+    theUrl += date1 + "/" + date2;
+    if(date1 == "" || date2 == "") {
+      alert("Must enter a value for the dates");
+    }
+    else {
+      $.ajax({
+          url: theUrl,
+          type: "get",
+          async: false,
+          success: function(data) {
+            download_csv(data['filename']);
+          }
+        });
+    }
   }
 
   function login() {
@@ -214,8 +338,15 @@ function search_patient() {
   			$("#name_search").css("display", "none");
   		}
 
+      if(curr_value == "by_date") {
+        $("#date_search").css("display", "block");
+      }
+      else {
+        $("#date_search").css("display", "none");
+      }
 
-	})
+
+	});
 
 //admin funcitons
 
@@ -314,8 +445,16 @@ function search_patient() {
   }
 
   function admin_create_table(data, is_array) {
+      if(is_array == 1) { //search by name
+      for(var i = 0; i < data.length; i++) {
+        add_table_row(data[i]);
+      }
+    }
+    else { //search by user
       add_table_row(data);
+    }
       $("#dr_results_table").css("display", "block");
+
   }
 
   function add_table_row(data) {
