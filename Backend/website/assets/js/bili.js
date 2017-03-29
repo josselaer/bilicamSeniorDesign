@@ -403,7 +403,12 @@ function search_patient() {
       data: dataToSend,
       success: function(res) {
         var jsonRes = JSON.parse(res);
-        admin_create_table(jsonRes,1);
+        if(jsonRes.length > 1) {
+          admin_create_table(jsonRes,1);
+        }
+        else {
+          admin_create_table(jsonRes,0);
+        }
       }
     });
   }
